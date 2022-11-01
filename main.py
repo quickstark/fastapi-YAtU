@@ -42,10 +42,18 @@ AWS_SESSION = boto3.Session(
     aws_secret_access_key=AWS_SECRET
 )
 
+origins = [
+    "http://localhost",
+    "https://quickstark-vite-images.up.railway.app/",
+]
+
 app = FastAPI(debug=True)
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=origins,
+                   allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 # define Python user-defined exceptions
+
+
 class SentryError(Exception):
     """Base class for custom Sentry exceptions"""
     pass
@@ -55,6 +63,8 @@ class Msg(BaseModel):
     msg: str
 
 # Extend an ImageModel from pydantic BaseModel
+
+
 class ImageModel(BaseModel):
     id: int
     name: str
@@ -66,6 +76,7 @@ class ImageModel(BaseModel):
     date_identified: Optional[date]
     ai_labels: Optional[list]
     ai_text: Optional[list]
+
 
 @app.get("/images", response_model=List[ImageModel])
 async def get_all_images():
@@ -104,7 +115,7 @@ async def add_photo(file: UploadFile):
     uploaded_file_url = f"https://{AWS_BUCKET}.s3.amazonaws.com/{file.filename}"
 
     amzlabels, amztext, amzmods = amazon_detection(file)
-    
+
     # Case insensitive check to see if the image contained the word "error"
     if any('Error'.casefold() or 'Errors'.casefold() in text.casefold() for text in amztext):
         print("Yes, we have an error")
@@ -128,6 +139,7 @@ async def add_photo(file: UploadFile):
     conn.commit()
     cur.close()
     conn.close()
+
 
 @app.delete("/delete_image/{id}", status_code=201)
 async def delete_photo(id):
@@ -153,12 +165,13 @@ async def delete_photo(id):
     conn.commit()
     cur.close()
     conn.close()
-    
+
     # Create an S3 Client from our authenticated AWS Session
     # Use to delete our S3 file using the filename
     awsclient = AWS_SESSION.client("s3",)
     response = awsclient.delete_object(Bucket=AWS_BUCKET, Key=image[1])
     print(f"Amazon Deletion {response}")
+
 
 @app.get("/")
 async def root():
@@ -178,6 +191,7 @@ async def demo_post(inp: Msg):
 @app.get("/path/{path_id}")
 async def demo_get_path_id(path_id: int):
     return {"message": f"This is /path/{path_id} endpoint, use post request to retrieve result"}
+
 
 def amazon_detection(file):
     awsclient = AWS_SESSION.client("rekognition")
@@ -206,5 +220,5 @@ def amazon_detection(file):
     print(detect_labels_list)
     print(detect_text_list)
     print(detect_moderation_list)
-    
+
     return detect_labels_list, detect_text_list, detect_moderation_list
