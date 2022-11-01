@@ -16,4 +16,4 @@ uvloop==0.16.0
 watchfiles==0.16.1
 websockets==10.3
 boto3==1.25.4
-python-multipart==1.16.0
+python-multipart==0.0.5
