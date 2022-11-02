@@ -17,13 +17,6 @@ from pydantic import BaseModel
 from sentry_sdk import capture_exception
 from sentry_sdk import configure_scope
 
-# Instantiate the Sentry SDK with DSN
-SENTRY_DSN = os.getenv('FASTAPI_SENTRY_DSN')
-sentry_sdk.init(
-    dsn=SENTRY_DSN,
-    traces_sample_rate=1.0,
-)
-
 # Prep our environment variables / upload .env to Railway.app
 # (or create manually in the FastAPI Railway settings)
 load_dotenv()
@@ -41,6 +34,13 @@ AWS_SESSION = boto3.Session(
     region_name="us-east-2",
     aws_access_key_id=AWS_KEY,
     aws_secret_access_key=AWS_SECRET
+)
+
+# Instantiate the Sentry SDK using DSN
+SENTRY_DSN = os.getenv('FASTAPI_SENTRY_DSN')
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    traces_sample_rate=1.0,
 )
 
 origins = [
