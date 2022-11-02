@@ -17,7 +17,7 @@ from pydantic import BaseModel
 from sentry_sdk import capture_exception
 from sentry_sdk import configure_scope
 
-# Instantiate the Sentry SDK
+# Instantiate the Sentry SDK with DSN
 SENTRY_DSN = os.getenv('FASTAPI_SENTRY_DSN')
 sentry_sdk.init(
     dsn=SENTRY_DSN,
