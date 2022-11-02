@@ -17,6 +17,13 @@ from pydantic import BaseModel
 from sentry_sdk import capture_exception
 from sentry_sdk import configure_scope
 
+# Instantiate the Sentry SDK
+SENTRY_DSN = os.getenv('FASTAPI_SENTRY_DSN')
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    traces_sample_rate=1.0,
+)
+
 # Prep our environment variables / upload .env to Railway.app
 # (or create manually in the FastAPI Railway settings)
 load_dotenv()
@@ -28,13 +35,6 @@ PW = os.getenv('PGPASSWORD')
 AWS_KEY = os.getenv('AMAZON_KEY_ID')
 AWS_SECRET = os.getenv('AMAZON_KEY_SECRET')
 AWS_BUCKET = os.getenv('AMAZON_S3_BUCKET')
-
-# Instantiate the Sentry SDK
-SENTRY_DSN = os.getenv('FASTAPI_SENTRY_DSN')
-sentry_sdk.init(
-    dsn=SENTRY_DSN,
-    traces_sample_rate=1.0,
-)
 
 # Instantiate an AWS Session (orthogonal to Client and Resource)
 AWS_SESSION = boto3.Session(
@@ -82,9 +82,6 @@ class ImageModel(BaseModel):
 @app.get("/images", response_model=List[ImageModel])
 async def get_all_images():
 
-    with configure_scope() as scope:
-        scope.transaction.name = "/Get Images"
-
     # Connect to Postgres
     conn = psycopg2.connect(
         database=DB, user=USER, password=PW, host=HOST, port=PORT
@@ -110,9 +107,6 @@ async def get_all_images():
 @app.post("/add_image", status_code=201)
 async def add_photo(file: UploadFile):
     print(f"Upload File Endpoint ${file.filename} - ${file.content_type}")
-
-    with configure_scope() as scope:
-        scope.transaction.name = "/Add Image"
 
     # Create an S3 Client from our authenticated AWS Session
     awsclient = AWS_SESSION.resource("s3",)
