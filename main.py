@@ -29,7 +29,7 @@ AWS_SECRET = os.getenv('AMAZON_KEY_SECRET')
 AWS_BUCKET = os.getenv('AMAZON_S3_BUCKET')
 
 # Instantiate the Sentry SDK
-SENTRY_DSN = os.getenv('FAST_SENTRY_DSN')
+SENTRY_DSN = os.getenv('FASTAPI_SENTRY_DSN')
 sentry_sdk.init(
     dsn=SENTRY_DSN,
     traces_sample_rate=1.0,
