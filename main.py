@@ -120,10 +120,20 @@ async def add_photo(file: UploadFile):
         return {"message": f"file.name may contain questionable content. Let's keep it family friendly. ;-)"}
 
     # Case insensitive check to see if the image contained the word "error"
-    if any('Error'.casefold() or 'Errors'.casefold() or 'Bug'.casefold() or 'Insect'.casefold() in text.casefold() for text in amztext):
-        print("Yes, we have an error")
+    if any('Error'.casefold() or 'Errors'.casefold() in text.casefold() for text in amztext):
+        print("Yes, we have Error Text!")
         try:
-            error_message = f"Image Error - {' '.join(amztext)}"
+            error_message = f"Image Text Error - {' '.join(amztext)}"
+            raise Exception(error_message)
+        except Exception as err:
+            capture_exception(err)
+            print(err)
+
+    # Case insensitive check to see if the image is a Bug or Insect
+    if any('Bug'.casefold() or 'Insect'.casefold() in text.casefold() for text in amzlabels):
+        print("Yes, we have Bug!")
+        try:
+            error_message = f"Image Bug - {' '.join(amzlabels)}"
             raise Exception(error_message)
         except Exception as err:
             capture_exception(err)
