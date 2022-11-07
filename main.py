@@ -14,8 +14,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from sentry_sdk import capture_exception
-from sentry_sdk import configure_scope
+from sentry_sdk import capture_exception, configure_scope
 
 # Prep our environment variables / upload .env to Railway.app
 # (or create manually in the FastAPI Railway settings)
@@ -117,8 +116,11 @@ async def add_photo(file: UploadFile):
 
     amzlabels, amztext, amzmods = amazon_detection(file)
 
+    if any('Suggestive'.casefold() or 'Underwear'.casefold() or 'Revealing'.casefold() in text.casefold() for text in amzmods):
+        return {"message": f"file.name may contain questionable content. Let's keep it family friendly. ;-)"}
+
     # Case insensitive check to see if the image contained the word "error"
-    if any('Error'.casefold() or 'Errors'.casefold() in text.casefold() for text in amztext):
+    if any('Error'.casefold() or 'Errors'.casefold() or 'Bug'.casefold() or 'Insect'.casefold() in text.casefold() for text in amztext):
         print("Yes, we have an error")
         try:
             error_message = f"Image Error - {' '.join(amztext)}"
@@ -153,13 +155,16 @@ async def delete_photo(id):
 
     # Note: don't be tempted to use string interpolation on the SQL string ...
     # have never gotten that to accept a List into a text[] or varchar[] Postgres column
+
+    # Fetch the Image ID (remember, "DATA" needs to be a tuple)
     SQL = "SELECT * FROM images WHERE id = %s"
     DATA = (id,)
     cur = conn.cursor()
     cur.execute(SQL, DATA)
-    image = cur.fetchone()
+    image = cur.fetchone()  # Just fetch the specific ID we need
     print(f"Fetched Image Postgres: {image}")
 
+    # Now delete the File
     SQL = "DELETE FROM images WHERE id = %s"
     cur.execute(SQL, DATA)
     print(f"Deleted Image from Postgres")
