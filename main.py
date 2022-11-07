@@ -233,7 +233,10 @@ def amazon_detection(file):
         if text["Type"] == "LINE" and text["Confidence"] > 80:
             detect_text_list.append(text["DetectedText"])
 
-    print(detect_labels_list)
+    detect_modified_labels = list(
+        map(lambda x: x.replace('Insect', 'Bug'), detect_labels_list))
+
+    print(detect_modified_labels)
     print(detect_text_list)
     print(detect_moderation_list)
 
