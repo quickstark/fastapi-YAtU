@@ -240,4 +240,4 @@ def amazon_detection(file):
     print(detect_text_list)
     print(detect_moderation_list)
 
-    return detect_labels_list, detect_text_list, detect_moderation_list
+    return detect_modified_labels, detect_text_list, detect_moderation_list
