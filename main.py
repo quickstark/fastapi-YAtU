@@ -117,7 +117,7 @@ async def add_photo(file: UploadFile):
     amzlabels, amztext, amzmods = amazon_detection(file)
 
     if any('Suggestive'.casefold() or 'Underwear'.casefold() or 'Revealing'.casefold() in text.casefold() for text in amzmods):
-        return {"message": f"file.name may contain questionable content. Let's keep it family friendly. ;-)"}
+        return {"message": f"{file.filename} may contain questionable content. Let's keep it family friendly. ;-)"}
 
     # Case insensitive check to see if the image contained the word "error"
     if any('Error'.casefold() or 'Errors'.casefold() in text.casefold() for text in amztext):
