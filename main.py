@@ -51,7 +51,7 @@ app = FastAPI(debug=True)
 app.add_middleware(CORSMiddleware, allow_origins=["*"],
                    allow_credentials=False, allow_methods=["*"], allow_headers=["*"])
 
-# define Python user-defined exceptions
+# Define Python user-defined exceptions
 
 
 class SentryError(Exception):
@@ -76,6 +76,8 @@ class ImageModel(BaseModel):
     date_identified: Optional[date]
     ai_labels: Optional[list]
     ai_text: Optional[list]
+
+# Fetch all images from Postgres
 
 
 @app.get("/images", response_model=List[ImageModel])
