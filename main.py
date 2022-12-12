@@ -7,7 +7,9 @@ from typing import List, Optional
 import boto3
 import psycopg2
 import sentry_sdk
-# Configure the client
+import openai
+
+# Configure the clients
 from botocore.config import Config
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
@@ -27,6 +29,7 @@ PW = os.getenv('PGPASSWORD')
 AWS_KEY = os.getenv('AMAZON_KEY_ID')
 AWS_SECRET = os.getenv('AMAZON_KEY_SECRET')
 AWS_BUCKET = os.getenv('AMAZON_S3_BUCKET')
+OPENAI = os.getenv('OPENAI')
 
 # Instantiate an AWS Session (orthogonal to Client and Resource)
 AWS_SESSION = boto3.Session(
@@ -78,6 +81,19 @@ class ImageModel(BaseModel):
     ai_text: Optional[list]
 
 # Fetch all images from Postgres
+
+
+@app.get("/create_image/{search}")
+async def create_image(search):
+    openai.api_key = OPENAI
+    print(OPENAI)
+    response = openai.Image.create(
+        prompt=search,
+        n=1,
+        size="512x512"
+    )
+    image_url = response['data'][0]['url']
+    return image_url
 
 
 @app.get("/images", response_model=List[ImageModel])
