@@ -6,8 +6,12 @@ on:
       - main
 
 jobs:
-  - name: Upload coverage reports to Codecov
-    uses: codecov/codecov-action@v3
+  upload_test_coverage_to_codecov:
+      name: "Codecov Release"
+      runs-on: "ubuntu-latest"
+      steps:
+        - name: Upload coverage reports to Codecov
+          uses: codecov/codecov-action@v3
 
     information:
       name: GitHub Context
