@@ -39,10 +39,12 @@ AWS_SESSION = boto3.Session(
 )
 
 # Instantiate the Sentry SDK using DSN
-SENTRY_DSN = os.getenv('FASTAPI_SENTRY_DSN')
 sentry_sdk.init(
-    dsn=SENTRY_DSN,
+    dsn=os.getenv('FASTAPI_SENTRY_DSN'),
     traces_sample_rate=1.0,
+    _experiments={
+        "profiles_sample_rate": 1.0,
+    },
 )
 
 origins = [

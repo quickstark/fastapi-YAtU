@@ -6,16 +6,19 @@ on:
       - main
 
 jobs:
+  codecov:
+    - name: Codecov coverage reports
+      uses: codecov/codecov-action@v3
 
   information:
-    name: GitHub Context 
+    name: GitHub Context
     runs-on: ubuntu-latest
     steps:
       - name: Info
         run: echo "$GITHUB_CONTEXT"
 
   generate_git_tags:
-    name: 'GitHub Tags'
+    name: "GitHub Tags"
     runs-on: ubuntu-latest
     outputs:
       output_new_tag: ${{ steps.taggerFinal.outputs.new_tag }}
@@ -51,15 +54,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
-      
+
       - name: Echo New Tag
         run: |
           echo "The next tag version will be: ${{ steps.taggerFinal.outputs.new_tag }}"
 
   generate_git_release:
     needs: generate_git_tags
-    name: 'GitHub Release'
-    runs-on: 'ubuntu-latest'
+    name: "GitHub Release"
+    runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -82,9 +85,9 @@ jobs:
         uses: jungwinter/split@v2
         id: split_repo_name
         with:
-            msg: ${{ github.repository }}
-            separator: "/"
-            maxsplit: 1
+          msg: ${{ github.repository }}
+          separator: "/"
+          maxsplit: 1
       - name: Echo Repo Name
         run: echo "${{ steps.split_repo_name.outputs._1}}"
       - name: Sentry Release
