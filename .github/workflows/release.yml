@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  upload_test_coverage_to_codecov:
+    
+    upload_test_coverage_to_codecov:
       name: "Codecov Release"
       runs-on: "ubuntu-latest"
       steps:
