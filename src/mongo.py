@@ -5,13 +5,14 @@ Functions for interacting with MongoDB.
 import os
 import random
 import urllib.parse
+
 import pymongo
 from bson import json_util
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 from fastapi import APIRouter, Response
-# from pymongo import MongoClient
-# from pymongo.server_api import ServerApi
+from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 from sentry_sdk import configure_scope
 
 # Load dotenv in the base root refers to application_top
