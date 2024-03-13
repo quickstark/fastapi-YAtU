@@ -31,6 +31,8 @@ mongo_pw = urllib.parse.quote_plus(MONGO_PW)
 # Create the connection string
 uri = f"mongodb+srv://{mongo_user}:{mongo_pw}@{MONGO_CONN}"
 
+print(MONGO_CONN, MONGO_USER, MONGO_PW)
+
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
 
@@ -64,6 +66,8 @@ async def add_sample_mongo():
 async def get_one_mongo(id: str):
     # Fetch one document from the collection
     result = collection.find_one({"_id": ObjectId(id)})
+    result['id'] = str(result['_id'])
+    del[result['_id']]
     return result
 
 
