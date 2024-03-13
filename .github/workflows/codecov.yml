@@ -9,11 +9,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Print Environment Variables
+      - name: Check Environment Variables
         run: |
-          echo "MONGO_CONN: $MONGO_CONN"
-          echo "MONGO_USER: $MONGO_USER" 
-          echo "MONGO_PW: $MONGO_PW"
+          if [ -z "${{ env.MONGO_CONN }}" ]; then
+            echo "MONGO_CONN environment variable is not set"
+            exit 1
+          fi
+          if [ -z "${{ env.MONGO_USER }}" ]; then
+            echo "MONGO_USER environment variable is not set"
+            exit 1
+          fi
+          if [ -z "${{ env.MONGO_PW }}" ]; then
+            echo "MONGO_PW environment variable is not set"
+            exit 1
+          fi
         env:
           MONGO_CONN: ${{ secrets.MONGO_CONN }}
           MONGO_USER: ${{ secrets.MONGO_USER }}
