@@ -24,8 +24,10 @@ MONGO_CONN = os.getenv('MONGO_CONN')
 MONGO_USER = os.getenv('MONGO_USER')
 MONGO_PW = os.getenv('MONGO_PW')
 
+mongo_user = MONGO_USER.encode('utf-8')  # Encode to bytes
+
 # escape special characters in connection string
-mongo_user = urllib.parse.quote_plus(MONGO_USER)
+mongo_user = urllib.parse.quote_plus(mongo_user)
 mongo_pw = urllib.parse.quote_plus(MONGO_PW)
 
 # Create the connection string

@@ -7,15 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Test python API
     steps:
-    - uses: actions/checkout@v4
-    - name: Install requirements
-      run: pip install -r requirements.txt
-    - name: Run tests and collect coverage
-      run: pytest --cov .
-    - name: Upload coverage reports to Codecov
-      run: |
-        # Replace `linux` below with the appropriate OS
-        # Options are `alpine`, `linux`, `macos`, `windows`
-        curl -Os https://uploader.codecov.io/latest/linux/codecov
-        chmod +x codecov
-        ./codecov -t ${CODECOV_TOKEN}
+      - uses: actions/checkout@v4
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Run tests and collect coverage
+        run: pytest --cov .
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: quickstark/quickstark-fastapi-images
