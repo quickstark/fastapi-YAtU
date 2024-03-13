@@ -17,3 +17,14 @@ async def test_get_one_mongo(monkeypatch):
     assert isinstance(response, dict)
     expected_keys = {"name", "url", "ai_labels", "id"}
     assert expected_keys.issubset(response.keys())
+
+
+@pytest.mark.asyncio
+async def test_get_all_images_mongo(monkeypatch):
+
+    # Call the async function and await its result
+    response = await get_all_images_mongo()
+
+    assert isinstance(response, dict)
+    expected_keys = {"name", "url", "ai_labels", "id"}
+    assert expected_keys.issubset(response.keys())
