@@ -4,14 +4,28 @@ on: [push, pull_request]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     name: Test Python FastAPI
     steps:
       - uses: actions/checkout@v4
+
+      - name: Print Environment Variables
+        run: |
+          echo "MONGO_CONN: ${{ env.MONGO_CONN }}"
+          echo "MONGO_USER: ${{ env.MONGO_USER }}"
+          echo "MONGO_PW: ${{ env.MONGO_PW }}"
+        env:
+          MONGO_CONN: ${{ secrets.MONGO_CONN }}
+          MONGO_USER: ${{ secrets.MONGO_USER }}
+          MONGO_PW: ${{ secrets.MONGO_PW }}
+
       - name: Install requirements
         run: pip install -r requirements.txt
+
       - name: Run tests and collect coverage
-        run: pytest --cov=src tests/  
+        run: pytest --cov=src tests/
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
