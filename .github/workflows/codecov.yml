@@ -5,8 +5,9 @@ on: [push, pull_request]
 jobs:
   build:
     env:
-      MONGO_CONN: demo.nwq0dl1.mongodb.net
-      MONGO_USER: djn12313
+      MONGO_CONN: ${{ secrets.MONGO_CONN }}
+      MONGO_USER: ${{ secrets.MONGO_USER }}
+      MONGO_PW: ${{ secrets.MONGO_PW }}
     runs-on: ubuntu-latest
     name: Test Python FastAPI
     steps:
