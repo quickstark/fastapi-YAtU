@@ -33,14 +33,8 @@ MONGO_CONN = os.environ.get('MONGO_CONN', '')
 MONGO_USER = os.environ.get('MONGO_USER', '')
 MONGO_PW = os.environ.get('MONGO_PW', '')
 
-if not MONGO_USER:
-    raise ValueError("MONGO_USER environment variable is not set or is empty")
-
-if not MONGO_PW:
-    raise ValueError("MONGO_PW environment variable is not set or is empty")
-
-mongo_user = urllib.parse.quote_plus(MONGO_USER) if MONGO_USER else ''
-mongo_pw = urllib.parse.quote_plus(MONGO_PW) if MONGO_PW else ''
+mongo_user = urllib.parse.quote_plus(MONGO_USER)
+mongo_pw = urllib.parse.quote_plus(MONGO_PW)
 
 # escape special characters in connection string
 mongo_user = urllib.parse.quote_plus(mongo_user)
