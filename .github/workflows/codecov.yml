@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     env:
+      MONGO_CONN: demo.nwq0dl1.mongodb.net
       MONGO_USER: djn12313
     runs-on: ubuntu-latest
     name: Test Python FastAPI
