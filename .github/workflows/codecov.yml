@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Test Python FastAPI
     steps:
-      - uses: actions/check out@v4
+      - uses: actions/checkout@v4
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Run tests and collect coverage
-        run: pytest --cov .
+        run: pytest --cov=src tests/  
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
