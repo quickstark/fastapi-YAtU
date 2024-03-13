@@ -24,10 +24,8 @@ MONGO_CONN = os.getenv('MONGO_CONN')
 MONGO_USER = os.getenv('MONGO_USER')
 MONGO_PW = os.getenv('MONGO_PW')
 
-mongo_user = MONGO_USER.encode('utf-8')  # Encode to bytes
-
 # escape special characters in connection string
-mongo_user = urllib.parse.quote_plus(mongo_user)
+mongo_user = urllib.parse.quote_plus(MONGO_USER)
 mongo_pw = urllib.parse.quote_plus(MONGO_PW)
 
 # Create the connection string
@@ -69,7 +67,7 @@ async def get_one_mongo(id: str):
     # Fetch one document from the collection
     result = collection.find_one({"_id": ObjectId(id)})
     result['id'] = str(result['_id'])
-    del[result['_id']]
+    del [result['_id']]
     return result
 
 
@@ -81,7 +79,7 @@ async def get_all_images_mongo():
     documents = collection.find({})
     dict_cursor = [doc for doc in documents]
     for d in dict_cursor:
-        d["id"] = str(d["_id"]) # swapping _id for id
+        d["id"] = str(d["_id"])  # swapping _id for id
         print(d)
     resp = json_util.dumps(dict_cursor, ensure_ascii=False)
     return Response(content=resp, media_type="application/json")
