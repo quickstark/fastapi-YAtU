@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     name: Test Python FastAPI
     steps:
@@ -12,9 +11,9 @@ jobs:
 
       - name: Print Environment Variables
         run: |
-          echo "MONGO_CONN: ${{ env.MONGO_CONN }}"
-          echo "MONGO_USER: ${{ env.MONGO_USER }}"
-          echo "MONGO_PW: ${{ env.MONGO_PW }}"
+          echo "MONGO_CONN: $MONGO_CONN"
+          echo "MONGO_USER: $MONGO_USER" 
+          echo "MONGO_PW: $MONGO_PW"
         env:
           MONGO_CONN: ${{ secrets.MONGO_CONN }}
           MONGO_USER: ${{ secrets.MONGO_USER }}
