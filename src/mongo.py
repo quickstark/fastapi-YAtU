@@ -20,12 +20,21 @@ APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
 dotenv_path = os.path.join(APP_ROOT, '.env')
 load_dotenv(dotenv_path)
 
-MONGO_CONN = os.getenv('MONGO_CONN')
-MONGO_USER = os.getenv('MONGO_USER')
-MONGO_PW = os.getenv('MONGO_PW')
+# MONGO_CONN = os.getenv('MONGO_CONN')
+# MONGO_USER = os.getenv('MONGO_USER')
+# MONGO_PW = os.getenv('MONGO_PW')
 
-mongo_user = MONGO_USER.encode('utf-8')
-mongo_pw = MONGO_PW.encode('utf-8')
+# mongo_user = MONGO_USER.encode('utf-8')
+# mongo_pw = MONGO_PW.encode('utf-8')
+
+# Load environment variables
+MONGO_CONN = os.environ.get('MONGO_CONN')
+MONGO_USER = os.environ.get('MONGO_USER')
+MONGO_PW = os.environ.get('MONGO_PW')
+
+# Encode environment variables if present
+mongo_user = urllib.parse.quote_plus(MONGO_USER.encode('utf-8')) if MONGO_USER else ''
+mongo_pw = urllib.parse.quote_plus(MONGO_PW.encode('utf-8')) if MONGO_PW else ''
 
 # escape special characters in connection string
 mongo_user = urllib.parse.quote_plus(mongo_user)
