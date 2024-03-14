@@ -31,7 +31,8 @@ conn = psycopg2.connect(
 # Create a new router for Postgres Routes
 router_postgres = APIRouter()
 
-# Extend an ImageModel from pydantic BaseModel
+print(DB, HOST, PORT, USER, PW)
+print(conn)
 
 
 class ImageModel(BaseModel):
